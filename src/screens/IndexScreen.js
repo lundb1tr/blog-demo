@@ -8,6 +8,8 @@ const IndexScreen = () => {
     <View>
       <Text>Index Screen</Text>
       <Button title="Add Post" onPress={addBlogPost} />
+      <Button title="Delete Last Post" onPress={addBlogPost} />
+      <Button title="Delete All Posts" onPress={addBlogPost} />
       <FlatList
         data={data}
         keyExtractor={blogPost => blogPost.title}

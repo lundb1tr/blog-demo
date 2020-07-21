@@ -3,7 +3,13 @@ import createDataContext from './createDataContext';
 const blogReducer = (state, { type }) => {
   switch (type) {
     case 'add_blog_post':
-      return [...state, { title: `Blog Post #${state.length + 1}` }];
+      return [
+        ...state,
+        {
+          id: Math.floor(Math.random() * 99999),
+          title: `Blog Post #${state.length + 1}`,
+        },
+      ];
     case 'delete_all_posts':
       return [];
     case 'delete_last_post':

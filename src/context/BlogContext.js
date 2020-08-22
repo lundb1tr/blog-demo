@@ -1,4 +1,5 @@
 import createDataContext from './createDataContext';
+import { ActionSheetIOS } from 'react-native';
 
 const blogReducer = (state, { type, payload }) => {
   switch (type) {
@@ -15,6 +16,10 @@ const blogReducer = (state, { type, payload }) => {
       return [];
     case 'delete_blog_post':
       return state.filter(blogPost => blogPost.id !== payload);
+    case 'edit_blog_post':
+      return state.map(blogPost => {
+        return blogPost.id === payload.id ? payload : blogPost;
+      });
     default:
       return state;
   }
@@ -23,7 +28,9 @@ const blogReducer = (state, { type, payload }) => {
 const addBlogPost = dispatch => {
   return (title, content, callback) => {
     dispatch({ type: 'add_blog_post', payload: { title, content } });
-    callback();
+    if (callback) {
+      callback();
+    }
   };
 };
 
@@ -33,8 +40,17 @@ const deleteBlogPost = dispatch => {
   };
 };
 
+const editBlogPost = dispatch => {
+  return (id, title, content, callback) => {
+    dispatch({ type: 'edit_blog_post', payload: { id, title, content } });
+    if (callback) {
+      callback();
+    }
+  };
+};
+
 export const { Context, Provider } = createDataContext(
   blogReducer,
-  { addBlogPost, deleteBlogPost },
+  { addBlogPost, deleteBlogPost, editBlogPost },
   [{ title: 'TEST POST', content: 'TEST CONTENT', id: 1 }]
 );

@@ -1,5 +1,5 @@
 import createDataContext from './createDataContext';
-import { ActionSheetIOS } from 'react-native';
+import jsonServer from '../api/jsonServer';
 
 const blogReducer = (state, { type, payload }) => {
   switch (type) {
@@ -20,9 +20,18 @@ const blogReducer = (state, { type, payload }) => {
       return state.map(blogPost => {
         return blogPost.id === payload.id ? payload : blogPost;
       });
+    case 'get_blog_posts':
+      return payload;
     default:
       return state;
   }
+};
+
+const getBlogPosts = dispatch => {
+  return async () => {
+    const response = await jsonServer.get('/blogposts');
+    dispatch({ type: 'get_blog_posts', payload: response.data });
+  };
 };
 
 const addBlogPost = dispatch => {
@@ -51,6 +60,6 @@ const editBlogPost = dispatch => {
 
 export const { Context, Provider } = createDataContext(
   blogReducer,
-  { addBlogPost, deleteBlogPost, editBlogPost },
-  [{ title: 'TEST POST', content: 'TEST CONTENT', id: 1 }]
+  { addBlogPost, deleteBlogPost, editBlogPost, getBlogPosts },
+  []
 );
